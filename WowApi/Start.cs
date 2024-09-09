@@ -19,6 +19,8 @@ public class Start
     {
         services.AddControllers();
         services.AddAutoMapper(typeof(MappingProfile).Assembly);
+
+        //MediatR register
         ConfigureMediatR(services);
 
         services.AddSwaggerGen(options =>

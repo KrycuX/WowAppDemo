@@ -30,11 +30,11 @@ namespace YourApp.Application.Tests.Queries
 
         public GetCharacterProfileQueryHandlerTests()
         {
-            // Ustawienie mappera
+            // Init mapper
             var mapperConfig = new MapperConfiguration(cfg => cfg.AddProfile(new MappingProfile()));
             _mapper = mapperConfig.CreateMapper();
 
-            // Inicjalizacja mocków
+            // Init mockq
             _httpClientFactoryMock = new Mock<IHttpClientFactory>();
             _oAuthServiceMock = new Mock<IOAuthService>();
             _blizzardApiSettingsMock = new Mock<IOptions<BlizzardApiSettings>>();
@@ -45,7 +45,7 @@ namespace YourApp.Application.Tests.Queries
                 Region = "us"
             });
 
-            // Inicjalizacja handlera
+            // Init handler
             _handler = new GetCharacterByNameQueryHandler(
                 _httpClientFactoryMock.Object,
                 _oAuthServiceMock.Object,
