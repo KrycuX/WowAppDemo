@@ -17,6 +17,7 @@ public class Start
 
     public void ConfigureServices(IServiceCollection services)
     {
+       
         services.AddControllers();
         services.AddAutoMapper(typeof(MappingProfile).Assembly);
 
@@ -35,9 +36,9 @@ public class Start
         });
 
         services.Configure<BlizzardApiSettings>(_configuration.GetSection("BlizzardApi"));
-        services.AddHttpClient("BlizzardApiClient", (servicePrvider, client) =>
+        services.AddHttpClient("BlizzardApiClient", (serviceProvider, client) =>
         {
-            var settings = servicePrvider.GetRequiredService<IOptions<BlizzardApiSettings>>().Value;
+            var settings = serviceProvider.GetRequiredService<IOptions<BlizzardApiSettings>>().Value;
             client.BaseAddress = new Uri(settings.Endpoint);
         });
 
