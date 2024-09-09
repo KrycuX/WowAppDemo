@@ -1,5 +1,5 @@
 using Microsoft.AspNetCore;
-using WowApi;
+using WowApi.Api;
 
 public class Program
 {

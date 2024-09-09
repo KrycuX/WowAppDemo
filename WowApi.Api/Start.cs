@@ -5,7 +5,7 @@ using WowApi.Application.CQRS.Queries;
 using WowApi.Application.Mapping;
 using WowApi.Application.Services;
 
-namespace WowApi;
+namespace WowApi.Api;
 public class Start
 {
     private readonly IConfiguration _configuration;
