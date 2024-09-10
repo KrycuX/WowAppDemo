@@ -12,7 +12,7 @@ using System.Text.Json;
 using System.Threading;
 using System.Threading.Tasks;
 using WowApi.Application.Configuration;
-using WowApi.Application.CQRS.Queries;
+using WowApi.Application.Handlers.Character.Queries;
 using WowApi.Application.Mapping;
 using WowApi.Application.Services;
 using Xunit;

@@ -11,6 +11,7 @@
     <PackageReference Include="Cqrs" Version="5.2.2.49" />
     <PackageReference Include="MediatR" Version="12.4.1" />
     <PackageReference Include="MediatR.Extensions.Autofac.DependencyInjection" Version="12.1.0" />
+    <PackageReference Include="Microsoft.Extensions.Hosting.Abstractions" Version="8.0.0" />
     <PackageReference Include="Microsoft.Extensions.Http" Version="8.0.0" />
   </ItemGroup>
 
@@ -20,7 +21,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="CQRS\Commands\Handlers\" />
+    <Folder Include="Handlers\Character\Commands\" />
   </ItemGroup>
 
 </Project>

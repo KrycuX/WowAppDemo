@@ -1,7 +1,7 @@
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
-using WowApi.Application.CQRS.Queries;
 using WowApi.Application.Dtos;
+using WowApi.Application.Handlers;
 
 namespace WowApi.Controllers
 {

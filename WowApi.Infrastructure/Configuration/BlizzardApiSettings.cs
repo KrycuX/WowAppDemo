@@ -1,4 +1,4 @@
-﻿namespace WowApi.Application.Configuration;
+﻿namespace WowApi.Infrastructure.Configuration;
 
 public class BlizzardApiSettings
 {

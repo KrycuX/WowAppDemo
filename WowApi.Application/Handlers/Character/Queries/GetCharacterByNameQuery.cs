@@ -1,7 +1,7 @@
 ﻿using MediatR;
 using WowApi.Application.Dtos;
 
-namespace WowApi.Application.CQRS.Queries;
+namespace WowApi.Application.Handlers;
 
 public class GetCharacterByNameQuery : IRequest<CharacterProfileDto>
 {
