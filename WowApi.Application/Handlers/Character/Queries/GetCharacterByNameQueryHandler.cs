@@ -32,6 +32,9 @@ public class GetCharacterByNameQueryHandler : IRequestHandler<GetCharacterByName
 		{
 			string url = $"/profile/wow/character/{request.Realm.ToLower()}/{request.CharacterProfileName.ToLower()}?namespace=profile-{_blizzardApiSettings.Value.Region}&locale=en_US";
 			var response = await _blizzardApiClient.FetchDataAsync<CharacterProfile>(url, cancellationToken);
+			if (response == null)
+				throw new ApplicationException("Character not found.");
+
 			var dto = _mapper.Map<CharacterProfileDto>(response);
 
 			return dto;
@@ -46,7 +49,7 @@ public class GetCharacterByNameQueryHandler : IRequestHandler<GetCharacterByName
 		}
 		catch (Exception ex)
 		{
-			throw new ApplicationException("An unexpected error occurred.", ex);
+			throw new ApplicationException("Character not found.", ex);
 		}
 	}
 }

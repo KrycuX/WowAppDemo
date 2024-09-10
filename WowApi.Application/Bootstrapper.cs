@@ -19,11 +19,12 @@ public static class Bootstrapper
 		services.AddMediatR(cfg => cfg.RegisterServicesFromAssemblies(Assembly.GetExecutingAssembly()));
 		services.AddAutoMapper(Assembly.GetExecutingAssembly());
 
-		services.AddHttpClient<BlizzardApiClient>((serviceProvider, client) =>
+		services.AddHttpClient<IBlizzardApiClient,BlizzardApiClient>((serviceProvider, client) =>
 		{
 			var settings = serviceProvider.GetRequiredService<IOptions<BlizzardApiSettings>>().Value;
 			client.BaseAddress = new Uri(settings.Endpoint);
 			client.DefaultRequestHeaders.Add("Accept", "application/json");
+
 		}).AddHttpMessageHandler<BlizzardApiAuthHandler>();
 
 
