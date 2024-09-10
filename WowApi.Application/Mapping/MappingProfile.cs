@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
 using WowApi.Application.Dtos;
-using WowApi.Infrastructure.ExternalApiModels;
+using WowApi.Infrastructure.BlizzardApi.ExternalApiModels;
 
 namespace WowApi.Application.Mapping;
 

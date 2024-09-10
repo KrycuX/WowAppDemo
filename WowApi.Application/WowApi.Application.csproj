@@ -17,7 +17,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\WowApi.Domain\WowApi.Domain.csproj" />
-    <ProjectReference Include="..\WowApi.Infrastructure\WowApi.Infrastructure.csproj" />
+    <ProjectReference Include="..\WowApi.Infrastructure.BlizzardApi\WowApi.Infrastructure.BlizzardApi.csproj" />
   </ItemGroup>
 
   <ItemGroup>

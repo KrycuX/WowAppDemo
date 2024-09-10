@@ -1,6 +1,6 @@
 ﻿using System.Text.Json.Serialization;
 
-namespace WowApi.Infrastructure.ExternalApiModels;
+namespace WowApi.Infrastructure.BlizzardApi.ExternalApiModels;
 
 public class TokenResponse
 {

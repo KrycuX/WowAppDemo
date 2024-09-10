@@ -5,11 +5,11 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using System.Net.Http.Headers;
 using System.Text.Json;
-using WowApi.Infrastructure.Configuration;
-using WowApi.Infrastructure.ExternalApiModels;
+using WowApi.Infrastructure.BlizzardApi.Configuration;
+using WowApi.Infrastructure.BlizzardApi.ExternalApiModels;
 
 
-namespace WowApi.Infrastructure.Services;
+namespace WowApi.Infrastructure.BlizzardApi.Services;
 
 public class TokenManager : IHostedService
 {

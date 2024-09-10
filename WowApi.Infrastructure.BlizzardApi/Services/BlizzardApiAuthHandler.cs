@@ -1,6 +1,6 @@
 ﻿using System.Net.Http.Headers;
 
-namespace WowApi.Infrastructure.Services;
+namespace WowApi.Infrastructure.BlizzardApi.Services;
 
 public class BlizzardApiAuthHandler : DelegatingHandler
 {

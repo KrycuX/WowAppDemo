@@ -2,8 +2,9 @@
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using System.Reflection;
-using WowApi.Infrastructure.Configuration;
-using WowApi.Infrastructure.Services;
+using WowApi.Application.Services;
+using WowApi.Infrastructure.BlizzardApi.Configuration;
+using WowApi.Infrastructure.BlizzardApi.Services;
 
 namespace WowApi.Application;
 
@@ -27,10 +28,11 @@ public static class Bootstrapper
 
 		}).AddHttpMessageHandler<BlizzardApiAuthHandler>();
 
-
+		services.AddMemoryCache();
 		services.AddSingleton<TokenManager>();
 		services.AddSingleton<BlizzardApiAuthHandler>();
-		services.AddHostedService(provider => provider.GetRequiredService<TokenManager>());
+        services.AddSingleton<ICharacterDataService, CharacterDataService>();
+        services.AddHostedService(provider => provider.GetRequiredService<TokenManager>());
 
 		return services;
 	}

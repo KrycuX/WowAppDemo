@@ -3,12 +3,13 @@ using AutoMapper;
 using FluentAssertions;
 using Microsoft.Extensions.Options;
 using Moq;
+using WowApi.Application.Dtos;
 using WowApi.Application.Handlers;
 using WowApi.Application.Mapping;
-using WowApi.Infrastructure.Configuration;
-using WowApi.Infrastructure.ExternalApiModels;
-using WowApi.Infrastructure.Services;
-
+using WowApi.Application.Services;
+using WowApi.Infrastructure.BlizzardApi.Configuration;
+using WowApi.Infrastructure.BlizzardApi.ExternalApiModels;
+using WowApi.Infrastructure.BlizzardApi.Services;
 
 namespace WowApi.Application.Tests.Queries;
 
@@ -16,6 +17,7 @@ public class GetCharacterProfileQueryHandlerTests
 {
 	private readonly Mock<IBlizzardApiClient> _blizzardApiClientMock;
 	private readonly Mock<IOptions<BlizzardApiSettings>> _blizzardApiSettingsMock;
+	private readonly Mock<ICharacterDataService> _characterDataService;
 	private readonly IMapper _mapper;
 	private readonly GetCharacterByNameQueryHandler _handler;
 
@@ -33,12 +35,16 @@ public class GetCharacterProfileQueryHandlerTests
 			Endpoint = "https://api.blizzard.com",
 			Region = "us"
 		});
+        _characterDataService = new Mock<ICharacterDataService>(_blizzardApiClientMock.Object,
+            _blizzardApiSettingsMock.Object);
 
-		// Init handler
-		_handler = new GetCharacterByNameQueryHandler(
+        // Init handler
+        _handler = new GetCharacterByNameQueryHandler(
 			_blizzardApiClientMock.Object,
 			_blizzardApiSettingsMock.Object,
-			_mapper);
+			_mapper,
+            _characterDataService.Object
+            );
 	}
 
 	[Fact]
@@ -53,13 +59,17 @@ public class GetCharacterProfileQueryHandlerTests
 		{
 			Name = "Test Character",
 			Race = new CharacterRace { Id = 1 },
-			Class = new CharacterClass { Id = 2 },
+			CharacterClass = new CharacterClass { Id = 2 },
 			Level = 60
 		};
-
+		var full = new FullCharacterInfoDto() { CharacterProfile = new() };
 		_blizzardApiClientMock
 			.Setup(client => client.FetchDataAsync<CharacterProfile>(It.IsAny<string>(), It.IsAny<CancellationToken>()))
 			.ReturnsAsync(characterData);
+
+		_characterDataService
+			.Setup(service => service.GetFullData(It.IsAny<GetCharacterByNameQuery>(), It.IsAny<CancellationToken>()))
+			.ReturnsAsync(full);
 
 		// Act
 		var result = await _handler.Handle(query, CancellationToken.None);

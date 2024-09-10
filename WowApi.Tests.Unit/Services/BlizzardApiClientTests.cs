@@ -4,9 +4,9 @@ using Moq;
 using Moq.Protected;
 using System.Net;
 using System.Text.Json;
-using WowApi.Infrastructure.Configuration;
-using WowApi.Infrastructure.ExternalApiModels;
-using WowApi.Infrastructure.Services;
+using WowApi.Infrastructure.BlizzardApi.Configuration;
+using WowApi.Infrastructure.BlizzardApi.ExternalApiModels;
+using WowApi.Infrastructure.BlizzardApi.Services;
 
 namespace WowApi.Application.Tests.Queries.Services
 {
