@@ -1,6 +1,5 @@
 ﻿using AutoMapper;
 using FluentAssertions;
-using MediatR;
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Options;
 using Moq;
@@ -12,7 +11,7 @@ using WowApi.Infrastructure.BlizzardApi.Services.ExternalApiServices;
 using WowApi.Shared.Dtos.Character;
 using WowApi.Shared.UseCase.Character.Query;
 
-namespace WowApi.Application.Tests.Queries;
+namespace WowApi.Infrastructure.BlizzardApi.Tests.Handlers;
 
 public class GetCharacterProfileQueryHandlerTests
 {
@@ -78,7 +77,7 @@ public class GetCharacterProfileQueryHandlerTests
 
 		_memoryCacheMock
 			.Setup(x => x.CreateEntry(It.IsAny<object>()))
-			.Returns(Mock.Of<ICacheEntry>);
+		.Returns(Mock.Of<ICacheEntry>);
 
 
 		// Act
@@ -115,4 +114,3 @@ public class GetCharacterProfileQueryHandlerTests
 	}
 }
 delegate void OutDelegate<TIn, TOut>(TIn input, out TOut output);
-delegate T helpDelegate<TIn,T,TInn>(TIn inputKey, T inout, TInn input);

@@ -7,16 +7,16 @@ using System.Text.Json;
 using WowApi.Infrastructure.BlizzardApi.Services.ExternalApiServices;
 
 
-namespace WowApi.Application.Tests.Queries.Services
+namespace WowApi.Infrastructure.BlizzardApi.Tests.Services
 {
-    public class BlizzardApiClientTests
-    {
-        private readonly Mock<HttpMessageHandler> _httpMessageHandlerMock;
-        private readonly HttpClient _httpClient;
-        private readonly BlizzardApiClient _blizzardApiClient;
+	public class BlizzardApiClientTests
+	{
+		private readonly Mock<HttpMessageHandler> _httpMessageHandlerMock;
+		private readonly HttpClient _httpClient;
+		private readonly BlizzardApiClient _blizzardApiClient;
 
-        public BlizzardApiClientTests()
-        {
+		public BlizzardApiClientTests()
+		{
 			_httpMessageHandlerMock = new Mock<HttpMessageHandler>();
 
 			// Initialize HttpClient with mocked handler
@@ -29,24 +29,24 @@ namespace WowApi.Application.Tests.Queries.Services
 			_blizzardApiClient = new BlizzardApiClient(_httpClient);
 		}
 
-        [Fact]
-        public async Task FetchDataAsync_ShouldReturnData_WhenApiReturnsValidResponse()
-        {
-            // Arrange
-            var endpoint = "/test-endpoint";
-            var responseData = new { Name = "Test Character", Level = 60 };
-            var jsonResponse = JsonSerializer.Serialize(responseData);
+		[Fact]
+		public async Task FetchDataAsync_ShouldReturnData_WhenApiReturnsValidResponse()
+		{
+			// Arrange
+			var endpoint = "/test-endpoint";
+			var responseData = new { Name = "Test Character", Level = 60 };
+			var jsonResponse = JsonSerializer.Serialize(responseData);
 
-            _httpMessageHandlerMock.Protected()
-                .Setup<Task<HttpResponseMessage>>(
-                    "SendAsync",
-                    ItExpr.IsAny<HttpRequestMessage>(),
-                    ItExpr.IsAny<CancellationToken>())
-                .ReturnsAsync(new HttpResponseMessage
-                {
-                    StatusCode = HttpStatusCode.OK,
-                    Content = new StringContent(jsonResponse)
-                });
+			_httpMessageHandlerMock.Protected()
+				.Setup<Task<HttpResponseMessage>>(
+					"SendAsync",
+					ItExpr.IsAny<HttpRequestMessage>(),
+					ItExpr.IsAny<CancellationToken>())
+				.ReturnsAsync(new HttpResponseMessage
+				{
+					StatusCode = HttpStatusCode.OK,
+					Content = new StringContent(jsonResponse)
+				});
 
 			// Act
 			var result = await _blizzardApiClient.FetchDataAsync<JsonElement>(endpoint, CancellationToken.None);
@@ -56,35 +56,35 @@ namespace WowApi.Application.Tests.Queries.Services
 			var level = result.GetProperty("Level").GetInt32();
 
 			// Assert
-			
+
 			name.Should().Be("Test Character");
 			level.Should().Be(60);
-        }
+		}
 
-        [Fact]
-        public async Task FetchDataAsync_ShouldThrowException_WhenApiReturnsError()
-        {
-            // Arrange
-            var endpoint = "/test-endpoint";
+		[Fact]
+		public async Task FetchDataAsync_ShouldThrowException_WhenApiReturnsError()
+		{
+			// Arrange
+			var endpoint = "/test-endpoint";
 
-            _httpMessageHandlerMock.Protected()
-                .Setup<Task<HttpResponseMessage>>(
-                    "SendAsync",
-                    ItExpr.IsAny<HttpRequestMessage>(),
-                    ItExpr.IsAny<CancellationToken>())
-                .ReturnsAsync(new HttpResponseMessage
-                {
-                    StatusCode = HttpStatusCode.BadRequest
-                });
+			_httpMessageHandlerMock.Protected()
+				.Setup<Task<HttpResponseMessage>>(
+					"SendAsync",
+					ItExpr.IsAny<HttpRequestMessage>(),
+					ItExpr.IsAny<CancellationToken>())
+				.ReturnsAsync(new HttpResponseMessage
+				{
+					StatusCode = HttpStatusCode.BadRequest
+				});
 
-            // Act
-            Func<Task> act = async () => await _blizzardApiClient.FetchDataAsync<dynamic>(endpoint, CancellationToken.None);
+			// Act
+			Func<Task> act = async () => await _blizzardApiClient.FetchDataAsync<dynamic>(endpoint, CancellationToken.None);
 
-            // Assert
-            await act.Should().ThrowAsync<HttpRequestException>()
-                .WithMessage("Blizzard API request failed with status code BadRequest.");
-        }
+			// Assert
+			await act.Should().ThrowAsync<HttpRequestException>()
+				.WithMessage("Blizzard API request failed with status code BadRequest.");
+		}
 
-      
-    }
+
+	}
 }
