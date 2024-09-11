@@ -30,6 +30,7 @@
 
   <ItemGroup>
     <Folder Include="Handlers\Character\Commands\" />
+    <Folder Include="Handlers\Mounts\Command\" />
   </ItemGroup>
 
 </Project>

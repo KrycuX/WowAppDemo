@@ -1,4 +1,4 @@
-﻿namespace WowApi.Infrastructure.BlizzardApi.Dtos.Character;
+﻿namespace WowApi.Shared.Dtos.Character;
 public class CharacterProfileDto
 {
 	public int Id { get; set; }

@@ -1,15 +1,16 @@
 ﻿using AutoMapper;
 using FluentAssertions;
+using MediatR;
+using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Options;
 using Moq;
 using WowApi.Infrastructure.BlizzardApi.Configuration;
-using WowApi.Infrastructure.BlizzardApi.Dtos.Character;
 using WowApi.Infrastructure.BlizzardApi.ExternalApiModels.Character;
 using WowApi.Infrastructure.BlizzardApi.Handlers.Character.Queries;
 using WowApi.Infrastructure.BlizzardApi.Mapping;
-using WowApi.Infrastructure.BlizzardApi.Services;
 using WowApi.Infrastructure.BlizzardApi.Services.ExternalApiServices;
-using WowApi.Shared.UseCase.Querry;
+using WowApi.Shared.Dtos.Character;
+using WowApi.Shared.UseCase.Character.Query;
 
 namespace WowApi.Application.Tests.Queries;
 
@@ -17,7 +18,8 @@ public class GetCharacterProfileQueryHandlerTests
 {
 	private readonly Mock<IBlizzardApiClient> _blizzardApiClientMock;
 	private readonly Mock<IOptions<BlizzardApiSettings>> _blizzardApiSettingsMock;
-	private readonly Mock<ICharacterDataService> _characterDataService;
+	private readonly Mock<IMemoryCache> _memoryCacheMock;
+
 	private readonly IMapper _mapper;
 	private readonly RetrieveCharacterByNameQueryHandler _handler;
 
@@ -34,13 +36,14 @@ public class GetCharacterProfileQueryHandlerTests
 		{
 			Endpoint = "https://api.blizzard.com",
 		});
-		_characterDataService = new Mock<ICharacterDataService>(_blizzardApiClientMock.Object,
-			_blizzardApiSettingsMock.Object);
+
+		_memoryCacheMock = new Mock<IMemoryCache>();
 
 		// Init handler
 		_handler = new RetrieveCharacterByNameQueryHandler(
-			_characterDataService.Object,
-			_mapper	
+			_blizzardApiClientMock.Object,
+			_mapper,
+			_memoryCacheMock.Object
 			);
 	}
 
@@ -60,24 +63,25 @@ public class GetCharacterProfileQueryHandlerTests
 			CharacterClass = new CharacterClass { Id = 2 },
 			Level = 60
 		};
-		var full = new FullCharacterInfoDto() { CharacterProfile = new() };
+		var full = new CharacterProfileDto();
 		_blizzardApiClientMock
 			.Setup(client => client.FetchDataAsync<CharacterProfile>(It.IsAny<string>(), It.IsAny<CancellationToken>()))
 			.ReturnsAsync(characterData);
 
-		_characterDataService
-			.Setup(service => service.GetFullData(It.IsAny<RetrieveCharacterByNameQuery>(), It.IsAny<CancellationToken>()))
-			.ReturnsAsync(full);
+		CharacterProfile? outValue = new();
+		_memoryCacheMock.Setup(cache => cache.CreateEntry(It.IsAny<object>())).
+			 Returns(null as ICacheEntry);
 
 		// Act
 		var result = await _handler.Handle(query, CancellationToken.None);
 
 		// Assert
-		//result.Should().NotBeNull();
-		//result.Name.Should().Be("Test Character");
-		//result.Race?.Id.Should().Be(1);
-		//result.Class?.Id.Should().Be(2);
-		//result.Level.Should().Be(60);
+		result.Should().NotBeNull();
+		result.Character.Should().NotBeNull();
+		result.Character.Name.Should().Be("Test Character");
+		result.Character.Race?.Id.Should().Be(1);
+		result.Character.Class?.Id.Should().Be(2);
+		result.Character.Level.Should().Be(60);
 	}
 
 	[Fact]

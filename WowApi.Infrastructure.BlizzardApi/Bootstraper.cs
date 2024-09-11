@@ -3,7 +3,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using System.Reflection;
 using WowApi.Infrastructure.BlizzardApi.Configuration;
-using WowApi.Infrastructure.BlizzardApi.Services;
+
 using WowApi.Infrastructure.BlizzardApi.Services.ExternalApiServices;
 
 namespace WowApi.Infrastructure.BlizzardApi;
@@ -26,7 +26,6 @@ public static class Bootstraper
 		services.AddMemoryCache();
 		services.AddTransient<TokenManager>();
 		services.AddTransient<BlizzardApiAuthHandler>();
-		services.AddTransient<ICharacterDataService, CharacterDataService>();
 		services.AddHostedService(provider => provider.GetRequiredService<TokenManager>());
 		return services;
 	}

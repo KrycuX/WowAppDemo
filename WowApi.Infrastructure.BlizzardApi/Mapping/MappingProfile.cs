@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
-using WowApi.Infrastructure.BlizzardApi.Dtos.Character;
 using WowApi.Infrastructure.BlizzardApi.ExternalApiModels.Character;
+using WowApi.Shared.Dtos.Character;
 
 namespace WowApi.Infrastructure.BlizzardApi.Mapping;
 
