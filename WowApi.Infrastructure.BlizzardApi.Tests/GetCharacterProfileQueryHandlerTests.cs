@@ -69,8 +69,17 @@ public class GetCharacterProfileQueryHandlerTests
 			.ReturnsAsync(characterData);
 
 		CharacterProfile? outValue = new();
-		_memoryCacheMock.Setup(cache => cache.CreateEntry(It.IsAny<object>())).
-			 Returns(null as ICacheEntry);
+		object whatever;
+		_memoryCacheMock
+			.Setup(mc => mc.TryGetValue(It.IsAny<object>(), out whatever))
+			.Callback(new OutDelegate<object, object>((object k, out object v) =>
+				v = new object())) // mocked value here (and/or breakpoint)
+			.Returns(false);
+
+		_memoryCacheMock
+			.Setup(x => x.CreateEntry(It.IsAny<object>()))
+			.Returns(Mock.Of<ICacheEntry>);
+
 
 		// Act
 		var result = await _handler.Handle(query, CancellationToken.None);
@@ -96,6 +105,7 @@ public class GetCharacterProfileQueryHandlerTests
 		_blizzardApiClientMock
 			.Setup(client => client.FetchDataAsync<CharacterProfile>(It.IsAny<string>(), It.IsAny<CancellationToken>()))
 			.ReturnsAsync((CharacterProfile)null);
+		object whatever;
 
 		// Act
 		Func<Task> act = async () => await _handler.Handle(query, CancellationToken.None);
@@ -104,3 +114,5 @@ public class GetCharacterProfileQueryHandlerTests
 		await act.Should().ThrowAsync<ApplicationException>().WithMessage("Character not found.");
 	}
 }
+delegate void OutDelegate<TIn, TOut>(TIn input, out TOut output);
+delegate T helpDelegate<TIn,T,TInn>(TIn inputKey, T inout, TInn input);
