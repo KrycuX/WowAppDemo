@@ -1,5 +1,6 @@
 ﻿using Microsoft.OpenApi.Models;
-using WowApi.Application;
+using WowApi.Infrastructure.BlizzardApi;
+using WowApi.Shared;
 
 
 namespace WowApi.Api;
@@ -26,8 +27,7 @@ public class Start
 				});
 		});
 
-		services.AddConfiguration(_configuration);
-		services.AddWowApiApplication();
+		services.AddInfrastructure(_configuration);
 
 	}
 

@@ -13,7 +13,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\WowApi.Application\WowApi.Application.csproj" />
+    <ProjectReference Include="..\WowApi.Infrastructure.BlizzardApi\WowApi.Infrastructure.BlizzardApi.csproj" />
+    <ProjectReference Include="..\WowApi.Infrastructure.Database\WowApi.Infrastructure.Database.csproj" />
   </ItemGroup>
 
 </Project>

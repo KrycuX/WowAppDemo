@@ -1,43 +1,43 @@
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
-using WowApi.Application.Dtos;
-using WowApi.Application.Handlers;
+using WowApi.Infrastructure.BlizzardApi.Dtos.Character;
+using WowApi.Shared.UseCase.Querry;
 
-namespace WowApi.Controllers
+namespace WowApi.Api.Controllers
 {
-    [ApiController]
-    [Route("api/[controller]")]
-    public class CharactersController : ControllerBase
-    {
- 
-        private readonly ILogger<CharactersController> _logger;
+	[ApiController]
+	[Route("api/[controller]")]
+	public class CharactersController : ControllerBase
+	{
 
-        private readonly IMediator _mediator;
+		private readonly ILogger<CharactersController> _logger;
 
-        public CharactersController(ILogger<CharactersController> logger, IMediator mediator)
-        {
-            _logger = logger;
-            _mediator = mediator;
-        }
+		private readonly IMediator _mediator;
 
-        [HttpGet("character",Name = "GetCharacter")]
-        [ProducesResponseType(typeof(CharacterProfileDto), StatusCodes.Status200OK)]
-        public async Task<ActionResult<CharacterProfileDto>> GetCharacter(string characterName,string realm)
-        {
-            _logger.LogInformation("Received request to get character profile for {CharacterName} on {Realm}", characterName, realm);
+		public CharactersController(ILogger<CharactersController> logger, IMediator mediator)
+		{
+			_logger = logger;
+			_mediator = mediator;
+		}
 
-            var query = new GetCharacterByNameQuery(characterName, realm);
-            var result = await _mediator.Send(query);
-            if (result == null)
-            {
-                _logger.LogWarning("Character profile not found for {CharacterName} on {Realm}", characterName, realm);
-                return NotFound();
-            }
+		[HttpGet("character", Name = "GetCharacter")]
+		[ProducesResponseType(typeof(CharacterProfileDto), StatusCodes.Status200OK)]
+		public async Task<ActionResult<CharacterProfileDto>> GetCharacter(string characterName, string realm, string region)
+		{
+			_logger.LogInformation("Received request to get character profile for {CharacterName} on {Region} - {Realm} ", characterName, region, realm);
 
-            _logger.LogInformation("Successfully retrieved character profile for {CharacterName} on {Realm}", characterName, realm);
-            return Ok(result);
+			var query = new RetrieveCharacterByNameQuery(characterName, realm, region);
+			var result = await _mediator.Send(query);
+			if (result == null)
+			{
+				_logger.LogWarning("Character profile not found for {CharacterName} on {Region} - {Realm}", characterName, region, realm);
+				return NotFound();
+			}
 
-        }
+			_logger.LogInformation("Successfully retrieved character profile for {CharacterName} on {Region} - {Realm}", characterName, region, realm);
+			return Ok(result);
 
-    }
+		}
+
+	}
 }

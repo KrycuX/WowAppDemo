@@ -9,10 +9,13 @@
   <ItemGroup>
     <Compile Remove="Entities\**" />
     <Compile Remove="Repositories\**" />
+    <Compile Remove="Repository\**" />
     <EmbeddedResource Remove="Entities\**" />
     <EmbeddedResource Remove="Repositories\**" />
+    <EmbeddedResource Remove="Repository\**" />
     <None Remove="Entities\**" />
     <None Remove="Repositories\**" />
+    <None Remove="Repository\**" />
   </ItemGroup>
 
   <ItemGroup>
@@ -22,10 +25,11 @@
 
   <ItemGroup>
     <ProjectReference Include="..\WowApi.Domain\WowApi.Domain.csproj" />
+    <ProjectReference Include="..\WowApi.Shared\WowApi.Shared.csproj" />
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Repository\" />
+    <Folder Include="Handlers\Character\Commands\" />
   </ItemGroup>
 
 </Project>
